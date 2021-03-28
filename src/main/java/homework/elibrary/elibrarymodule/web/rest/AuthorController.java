@@ -1,6 +1,7 @@
 package homework.elibrary.elibrarymodule.web.rest;
 
-import homework.elibrary.elibrarymodule.service.CategoryService;
+import homework.elibrary.elibrarymodule.model.Author;
+import homework.elibrary.elibrarymodule.service.AuthorService;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -9,18 +10,18 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
 
 @RestController
-@RequestMapping("/categories")
+@RequestMapping("/authors")
 @CrossOrigin(origins = "http://localhost:3000")
-public class CategoryController {
+public class AuthorController {
 
-    private final CategoryService categoryService;
+    private final AuthorService authorService;
 
-    public CategoryController(CategoryService categoryService) {
-        this.categoryService = categoryService;
+    public AuthorController(AuthorService authorService) {
+        this.authorService = authorService;
     }
 
     @GetMapping
-    public List<String> allCategories(){
-        return this.categoryService.getAll();
+    public List<Author> getAll(){
+        return this.authorService.getAll();
     }
 }

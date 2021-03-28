@@ -13,4 +13,5 @@ public interface BookService {
     Optional<Book> editBook(Long id, BookDto bookDto);
     Optional<Book> deleteBook(Long id);
     Boolean takeBook(Long id);
+    void minusBook(Book book);
 }

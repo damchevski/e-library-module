@@ -18,6 +18,7 @@ public class BookController {
         this.bookService = bookService;
     }
 
+    @GetMapping
     public List<Book> getAllBooks() {
         return this.bookService.getAll();
     }
@@ -51,8 +52,8 @@ public class BookController {
                 .orElseGet(() -> ResponseEntity.notFound().build());
     }
 
-    @GetMapping("/take")
-    public Boolean takeBook(@RequestParam Long id) {
+    @GetMapping("/take/{id}")
+    public Boolean takeBook(@PathVariable Long id) {
         return this.bookService.takeBook(id);
     }
 

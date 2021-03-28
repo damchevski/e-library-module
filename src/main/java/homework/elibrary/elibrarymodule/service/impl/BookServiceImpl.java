@@ -4,10 +4,12 @@ import homework.elibrary.elibrarymodule.model.Author;
 import homework.elibrary.elibrarymodule.model.Book;
 import homework.elibrary.elibrarymodule.model.dto.BookDto;
 import homework.elibrary.elibrarymodule.model.enums.BookCategory;
+import homework.elibrary.elibrarymodule.model.events.BookTakeEvent;
 import homework.elibrary.elibrarymodule.repository.AuthorRepository;
 import homework.elibrary.elibrarymodule.repository.BookRepository;
 import homework.elibrary.elibrarymodule.repository.CategoryRepository;
 import homework.elibrary.elibrarymodule.service.BookService;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -19,11 +21,13 @@ public class BookServiceImpl implements BookService {
     private final BookRepository bookRepository;
     private final AuthorRepository authorRepository;
     private final CategoryRepository categoryRepository;
+    private final ApplicationEventPublisher applicationEventPublisher;
 
-    public BookServiceImpl(BookRepository bookRepository, AuthorRepository authorRepository, CategoryRepository categoryRepository) {
+    public BookServiceImpl(BookRepository bookRepository, AuthorRepository authorRepository, CategoryRepository categoryRepository, ApplicationEventPublisher applicationEventPublisher) {
         this.bookRepository = bookRepository;
         this.authorRepository = authorRepository;
         this.categoryRepository = categoryRepository;
+        this.applicationEventPublisher = applicationEventPublisher;
     }
 
     @Override
@@ -91,11 +95,15 @@ public class BookServiceImpl implements BookService {
         if (book.get().getAvailableCopies() - 1 < 0)
             return false;
 
-        book.get().takeBook();
-
-        this.bookRepository.save(book.get());
+        this.applicationEventPublisher.publishEvent(new BookTakeEvent(book.get()));
 
         return true;
+    }
+
+    @Override
+    public void minusBook(Book book) {
+        book.takeBook();
+        this.bookRepository.save(book);
     }
 
 

@@ -37,7 +37,7 @@ public class BookServiceImpl implements BookService {
 
     @Override
     public Optional<Book> getBook(Long id) {
-        return Optional.of(this.bookRepository.getOne(id));
+        return this.bookRepository.findById(id);
     }
 
     @Override
@@ -53,13 +53,13 @@ public class BookServiceImpl implements BookService {
 
     @Override
     public Optional<Book> editBook(Long id, BookDto bookDto) {
-        Book book = this.bookRepository.getOne(id);
+        Book book = this.bookRepository.findById(id).get();
 
         if (book == null) {
             return Optional.empty();
         }
 
-        Author author = this.authorRepository.getOne(bookDto.author);
+        Author author = this.authorRepository.findById(bookDto.author).get();
         BookCategory bookCategory = this.categoryRepository.getCategory(bookDto.category);
 
         book.setAuthor(author);

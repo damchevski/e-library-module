@@ -38,7 +38,7 @@ public class BookController {
     }
 
     @PutMapping("/edit/{id}")
-    public ResponseEntity<Book> addBook(@PathVariable Long id,
+    public ResponseEntity<Book> editBook(@PathVariable Long id,
                                         @RequestBody BookDto bookDto) {
         return this.bookService.editBook(id, bookDto)
                 .map(book -> ResponseEntity.ok().body(book))

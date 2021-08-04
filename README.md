@@ -1,4 +1,4 @@
-# e-library-module
+# e-library-module + testing
 java spring + react
 
 functions:

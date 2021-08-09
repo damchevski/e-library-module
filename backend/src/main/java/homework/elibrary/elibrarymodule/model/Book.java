@@ -57,4 +57,12 @@ public class Book {
     public void takeBook() {
         this.availableCopies -= 1;
     }
+
+    public Long getId() {
+        return id;
+    }
+
+    public String getName() {
+        return name;
+    }
 }

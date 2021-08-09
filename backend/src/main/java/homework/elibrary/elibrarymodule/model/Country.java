@@ -20,4 +20,9 @@ public class Country {
     private String continent;
 
     public Country(){}
+
+    public Country(String name, String continent){
+        this.name = name;
+        this.continent = continent;
+    }
 }

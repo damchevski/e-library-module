@@ -245,4 +245,67 @@ class ELibraryModuleApplicationTests {
     public void getAllCategoriesTF() {
         //categories is static enum always > 0
     }
+
+    @Test
+    public void editBookSuccess() {
+        author = this.authorRepository.save(author);
+        bookDto.author = author.getId();
+
+        Book book = this.bookService.addBook(bookDto).get();
+
+        bookDto.name = "EditBookTest";
+        assertEquals(bookDto.name, bookService.editBook(book.getId(), bookDto).get().getName());
+    }
+
+    @Test
+    public void editBookBookDoesNotExist() {
+        author = this.authorRepository.save(author);
+        bookDto.author = author.getId();
+
+        Book book = this.bookService.addBook(bookDto).get();
+        book.setId(book.getId()+1);
+
+        bookDto.name = "EditBookTest";
+        assertEquals(Optional.empty(), bookService.editBook(book.getId(), bookDto));
+    }
+
+    @Test
+    public void deleteBookSuccess() {
+        this.authorRepository.save(author);
+        this.bookRepository.save(book);
+
+        assertEquals(book.getName(), this.bookService.deleteBook(book.getId()).get().getName());
+    }
+
+    @Test
+    public void deleteBookBookDoesNotExist() {
+        this.authorRepository.save(author);
+        this.bookRepository.save(book);
+
+        assertEquals(Optional.empty(), this.bookService.deleteBook(-1L));
+    }
+
+    @Test
+    public void takeBookSuccess() {
+        this.authorRepository.save(author);
+        this.bookRepository.save(book);
+
+        assertTrue(this.bookService.takeBook(book.getId()));
+    }
+
+    @Test
+    public void takeBookDoesNotExist() {
+        this.authorRepository.save(author);
+
+        assertFalse(this.bookService.takeBook(-1L));
+    }
+
+    @Test
+    public void takeBookNoCopiesLeft() {
+        this.authorRepository.save(author);
+        book.setAvailableCopies(0);
+        this.bookRepository.save(book);
+
+        assertFalse(this.bookService.takeBook(book.getId()));
+    }
 }

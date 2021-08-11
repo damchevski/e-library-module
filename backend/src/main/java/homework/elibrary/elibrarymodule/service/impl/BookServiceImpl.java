@@ -53,7 +53,7 @@ public class BookServiceImpl implements BookService {
 
     @Override
     public Optional<Book> editBook(Long id, BookDto bookDto) {
-        Book book = this.bookRepository.findById(id).get();
+        Book book = this.bookRepository.findById(id).orElse(null);
 
         if (book == null) {
             return Optional.empty();

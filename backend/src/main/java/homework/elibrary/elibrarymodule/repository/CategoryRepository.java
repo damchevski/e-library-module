@@ -16,23 +16,6 @@ public class CategoryRepository {
     }
 
     public BookCategory getCategory(String category) {
-        switch (category) {
-            case "NOVEL":
-                return BookCategory.NOVEL;
-            case "THRILLER":
-                return BookCategory.THRILLER;
-            case "HISTORY":
-                return BookCategory.HISTORY;
-            case "FANTASY":
-                return BookCategory.FANTASY;
-            case "BIOGRAPHY":
-                return BookCategory.BIOGRAPHY;
-            case "CLASSICS":
-                return BookCategory.CLASSICS;
-            case "DRAMA":
-                return BookCategory.DRAMA;
-            default:
-                return null;
-        }
+        return BookCategory.valueOf(category);
     }
 }

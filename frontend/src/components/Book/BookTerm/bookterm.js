@@ -3,11 +3,11 @@ import { Link } from "react-router-dom";
 
 const bookTerm = (props) => {
     return (
-        <tr>
-            <td>{props.term.name}</td>
-            <td>{props.term.category}</td>
-            <td>{props.term.author.name + " " + props.term.author.surname}</td>
-            <td>{props.term.availableCopies}</td>
+        <tr class="book">
+            <td class="bookName">{props.term.name}</td>
+            <td class="bookCategory">{props.term.category}</td>
+            <td class="bookAuthor">{props.term.author.name + " " + props.term.author.surname}</td>
+            <td class="bookNCopies">{props.term.availableCopies}</td>
             <td>
                  <a title={"Take Book"} className={"btn btn-success"}
                    onClick={() => props.takeBook(props.term.id)}>

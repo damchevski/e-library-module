@@ -30,7 +30,7 @@ import static org.junit.Assert.*;
 
 @ActiveProfiles("test")
 @SpringBootTest
-class ELibraryModuleApplicationTests {
+ class ELibraryModuleApplicationTests {
 
     @Test
     void contextLoads() {
@@ -92,6 +92,8 @@ class ELibraryModuleApplicationTests {
         book = new Book("Book1Test", category, author, 55);
         bookDto = new BookDto("Book1Test", category.name(), author.getId(), 55);
     }
+
+    //Tests designed with Input Space Method
 
     @Test
     public void getAllAuthorsFT() {
@@ -246,6 +248,9 @@ class ELibraryModuleApplicationTests {
         //categories is static enum always > 0
     }
 
+
+    // Tests designed with Graph Method
+
     @Test
     public void editBookSuccess() {
         author = this.authorRepository.save(author);
@@ -308,4 +313,8 @@ class ELibraryModuleApplicationTests {
 
         assertFalse(this.bookService.takeBook(book.getId()));
     }
+
+
+
+
 }

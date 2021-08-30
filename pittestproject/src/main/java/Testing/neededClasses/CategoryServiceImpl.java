@@ -1,6 +1,8 @@
-package Testing;
+package Testing.neededClasses;
 
 import java.util.List;
+
+import Testing.*;
 
 public class CategoryServiceImpl implements CategoryService {
 

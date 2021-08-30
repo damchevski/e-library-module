@@ -1,4 +1,6 @@
-package Testing;
+package Testing.neededClasses;
+
+import Testing.*;
 
 import java.util.List;
 import java.util.Optional;

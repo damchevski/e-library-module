@@ -1,19 +1,22 @@
-package Testing;
+package Testing.neededClasses;
 
 import static org.junit.Assert.*;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+
+import Testing.*;
 
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
 
+import org.junit.Assert;
 import org.junit.Test;
 import org.junit.Before;
 
 public class Testing {
 
-   static AuthorRepository authorRepository = new AuthorRepository();
-   static CountryRepository countryRepository = new CountryRepository();
+    static AuthorRepository authorRepository = new AuthorRepository();
+    static CountryRepository countryRepository = new CountryRepository();
     static BookRepository bookRepository = new BookRepository();
     static CategoryRepository categoryRepository = new CategoryRepository();
 
@@ -68,7 +71,7 @@ public class Testing {
 
     @Test
     public void getAllAuthorsTF() {
-        assertEquals(authorService.getAll().size(), 0);
+        Assert.assertEquals(authorService.getAll().size(), 0);
     }
 
     @Test
@@ -80,7 +83,7 @@ public class Testing {
 
     @Test
     public void getAllBooksTF() {
-        assertEquals(0, bookService.getAll().size());
+        Assert.assertEquals(0, bookService.getAll().size());
     }
 
     @Test
@@ -155,7 +158,7 @@ public class Testing {
 
         bookDto.name = "EditBookTest1";
 
-        assertEquals(bookDto.name, bookService.editBook(book.getId(), bookDto).get().getName());
+        Assert.assertEquals(bookDto.name, bookService.editBook(book.getId(), bookDto).get().getName());
     }
 
     @Test
@@ -176,7 +179,7 @@ public class Testing {
         authorRepository.save(author);
         bookRepository.save(book);
 
-        assertEquals(Optional.empty(), bookService.deleteBook((long) -5));
+        Assert.assertEquals(Optional.empty(), bookService.deleteBook((long) -5));
     }
 
     @Test
@@ -184,7 +187,7 @@ public class Testing {
         authorRepository.save(author);
         book = bookRepository.save(book);
 
-        assertEquals(book.getName(), bookService.deleteBook(book.getId()).get().getName());
+        Assert.assertEquals(book.getName(), bookService.deleteBook(book.getId()).get().getName());
     }
 
     @Test
@@ -192,7 +195,7 @@ public class Testing {
         authorRepository.save(author);
         bookRepository.save(book);
 
-        assertEquals(false, bookService.takeBook((long) -5));
+        Assert.assertEquals(false, bookService.takeBook((long) -5));
     }
 
     @Test
@@ -224,7 +227,7 @@ public class Testing {
         Book book = bookService.addBook(bookDto).get();
 
         bookDto.name = "EditBookTest";
-        assertEquals(bookDto.name, bookService.editBook(book.getId(), bookDto).get().getName());
+        Assert.assertEquals(bookDto.name, bookService.editBook(book.getId(), bookDto).get().getName());
     }
 
     @Test
@@ -235,7 +238,7 @@ public class Testing {
         Book book = bookService.addBook(bookDto).get();
 
         bookDto.name = "EditBookTest";
-        assertEquals(Optional.empty(), bookService.editBook(book.getId()+1, bookDto));
+        Assert.assertEquals(Optional.empty(), bookService.editBook(book.getId() + 1, bookDto));
     }
 
     @Test
@@ -243,7 +246,7 @@ public class Testing {
         authorRepository.save(author);
         bookRepository.save(book);
 
-        assertEquals(book.getName(), bookService.deleteBook(book.getId()).get().getName());
+        Assert.assertEquals(book.getName(), bookService.deleteBook(book.getId()).get().getName());
     }
 
     @Test
@@ -251,7 +254,7 @@ public class Testing {
         authorRepository.save(author);
         bookRepository.save(book);
 
-        assertEquals(Optional.empty(), bookService.deleteBook(-1L));
+        Assert.assertEquals(Optional.empty(), bookService.deleteBook(-1L));
     }
 
     @Test
@@ -278,16 +281,65 @@ public class Testing {
     }
 
     // Mutation Testing
-//
-//    @Test
-//    public void getAllAuthorsMutation(){
-//        this.authorRepository.save(author);
-//
-//        Assertions.assertNotEquals(Collections.emptyList(), this.authorService.getAll());
-//    }
-//
-//    @Test
-//    public void getAllAuthorsEmptyMutation(){
-//        Assertions.assertEquals(Collections.emptyList(), this.authorService.getAll());
-//    }
+
+    @Test
+    public void setAuthorMutation() {
+        author = authorRepository.save(author);
+        bookDto.author = author.getId();
+
+        Book book = bookService.addBook(bookDto).get();
+
+        Author newAuthor = authorRepository.save(new Author("NewName", "NewSurname", new Country("Germany", "Europe")));
+
+        bookDto.author = newAuthor.getId();
+
+        Assert.assertEquals(bookDto.author, bookService.editBook(book.getId(), bookDto).get().getAuthor().getId());
+    }
+
+    @Test
+    public void setCopiesMutation() {
+        author = authorRepository.save(author);
+        bookDto.author = author.getId();
+
+        Book book = bookService.addBook(bookDto).get();
+
+        bookDto.availableCopies = 69;
+
+        Assert.assertEquals(Integer.valueOf(69), bookService.editBook(book.getId(), bookDto).get().getAvailableCopies());
+    }
+
+    @Test
+    public void setCategoryMutation() {
+        author = authorRepository.save(author);
+        bookDto.author = author.getId();
+
+        Book book = bookService.addBook(bookDto).get();
+
+        bookDto.category = "FANTASY";
+
+        Assert.assertEquals(BookCategory.FANTASY, bookService.editBook(book.getId(), bookDto).get().getCategory());
+    }
+
+    @Test
+    public void takeBookAvailableCopiesMutation(){
+        authorRepository.save(author);
+        bookDto.author = author.getId();
+
+        bookDto.availableCopies = 1;
+        Book book = bookService.addBook(bookDto).get();
+
+        assertTrue(bookService.takeBook(book.getId()));
+    }
+
+    @Test
+    public void takeBookMinusBookMutation(){
+        authorRepository.save(author);
+        bookDto.author = author.getId();
+
+        bookDto.availableCopies = 2;
+        Book book = bookService.addBook(bookDto).get();
+
+        bookService.takeBook(book.getId());
+        assertEquals(Integer.valueOf(1), bookService.getBook(book.getId()).get().getAvailableCopies());
+    }
 }

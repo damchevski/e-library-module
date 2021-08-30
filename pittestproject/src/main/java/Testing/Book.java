@@ -14,6 +14,14 @@ public class Book {
 
     private Integer availableCopies;
 
+    public BookCategory getCategory() {
+        return category;
+    }
+
+    public Author getAuthor() {
+        return author;
+    }
+
     public Book() {
     }
 
